@@ -17,7 +17,6 @@
 
 void cspm_compute_correction_terms(particle* particles);
 void perform_cspm(particle* particles);
-void cspm_set_kernel(kernel kernel_fun);
 void cspm_init(unsigned int num_part, kernel kernel_fun);
 void cspm_wipe_out();
 

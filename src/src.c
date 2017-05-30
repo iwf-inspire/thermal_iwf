@@ -1,35 +1,37 @@
-#include "../base/utils.h"
 #include "../test/eng_heat_model.h"
 #include "../test/reconstruction_test.h"
 #include "../test/synthetic_heat_test.h"
 
-int main() {
+int main(void) {
+	// choose your mesh-free scheme among: {SPH, PSE, RKPM, CSPM, NMFS}
+	const char meshfree_method = NMFS;
+	// define the number of particles in one direction
+	unsigned int Nx = 21;
+
 	// ******************************
 	// example 1: polynomial function
 	// ******************************
-	// run_reconstrunction_3D(20);
-	// full_perform();
+	run_reconstrunction_polynomial_3D(meshfree_method,Nx,false);
 
 	// *********************************
 	// example 2: trigonometric function
 	// *********************************
-	//run_thermal_cpu3D(21);
+	// run_reconstrunction_trigonometric_3D(meshfree_method,Nx,false);
 
 	// ***********************************
 	// example 3: synthetic transient heat
 	// ***********************************
-	transient_heat_test(21);
+	// run_transient_heat_3D(meshfree_method,Nx,false);
 
 	// ********************************
 	// example 4: synthetic steady heat
 	// ********************************
-	// steady_heat_test(21);
+	// run_steady_heat_3D(meshfree_method,Nx,false);
 
 	// ***********************************
 	// example 5: engineering model
 	// ***********************************
-	// run_eng_model3D();
-	// full_perform_thermal3D();
+	// run_eng_model_3D(meshfree_method);
 
 	printf("\n");
 	printf("-----------------finished successfully----------------");

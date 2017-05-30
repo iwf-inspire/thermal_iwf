@@ -1,9 +1,3 @@
-/*
- * sph.c
- *
- *  Created on: Sep 4, 2014
- *      Author: matthias
- */
 #include "sph.h"
 
 static kernel _kernel;
@@ -164,10 +158,6 @@ void perform_sph_brookshaw(particle* particles) {
 			particles[i].LaplF = laplacian;
 		}
 	}
-}
-
-void sph_set_kernel(kernel kernel_fun) {
-	_kernel = kernel_fun;
 }
 
 void sph_init(kernel kernel_fun) {

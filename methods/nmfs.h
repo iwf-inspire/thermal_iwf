@@ -17,7 +17,6 @@
 
 void nmfs_compute_correction_terms(particle* particles);
 void perform_nmfs(particle* particles);
-void nmfs_set_kernel(kernel kernel_fun);
 void nmfs_init(unsigned int num_part, kernel kernel_fun);
 void nmfs_wipe_out();
 

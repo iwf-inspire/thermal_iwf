@@ -1,10 +1,3 @@
-/*
- * pse_cpu.cpp
- *
- *  Created on: Jan 12, 2016
- *      Author: mamzi
- */
-
 #include "pse.h"
 
 void perform_pse(particle* particles) {
@@ -90,7 +83,6 @@ void perform_pse(particle* particles) {
 					}
 				}
 			}
-
 			particles[i].f_x   = f_x;
 			particles[i].f_y   = f_y;
 			particles[i].f_z   = f_z;

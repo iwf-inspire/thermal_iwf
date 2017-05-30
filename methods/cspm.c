@@ -311,11 +311,11 @@ void perform_cspm(particle* particles) {
 
 
 			double rhs2[6] = {Fxx - Bxxx*fdx - Bxxy*fdy - Bxxz*fdz,
-					Fxy - Bxyx*fdx - Bxyy*fdy - Bxyz*fdz,
-					Fxz - Bxzx*fdx - Bxzy*fdy - Bxzz*fdz,
-					Fyy - Byyx*fdx - Byyy*fdy - Byyz*fdz,
-					Fyz - Byzx*fdx - Byzy*fdy - Byzz*fdz,
-					Fzz - Bzzx*fdx - Bzzy*fdy - Bzzz*fdz};
+							  Fxy - Bxyx*fdx - Bxyy*fdy - Bxyz*fdz,
+							  Fxz - Bxzx*fdx - Bxzy*fdy - Bxzz*fdz,
+							  Fyy - Byyx*fdx - Byyy*fdy - Byyz*fdz,
+							  Fyz - Byzx*fdx - Byzy*fdy - Byzz*fdz,
+							  Fzz - Bzzx*fdx - Bzzy*fdy - Bzzz*fdz};
 
 			double ders2[6];
 			solve6x6(Bi,rhs2,ders2);
@@ -330,10 +330,6 @@ void perform_cspm(particle* particles) {
 			particles[i].LaplF = f_xx + f_yy + f_zz;
 		}
 	}
-}
-
-void cspm_set_kernel(kernel kernel_fun) {
-	_kernel = kernel_fun;
 }
 
 void cspm_init(unsigned int Ntot, kernel kernel_fun) {

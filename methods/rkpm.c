@@ -477,10 +477,6 @@ void perform_rkpm(particle* particles) {
 	}
 }
 
-void rkpm_set_kernel(kernel kernel_fun) {
-	_kernel = kernel_fun;
-}
-
 void rkpm_init(unsigned int Ntot, kernel kernel_fun) {
 
 	m0    = (double*) calloc(Ntot,   sizeof(double));		//scalar

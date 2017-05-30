@@ -1,20 +1,13 @@
-/*
- * eng_thermal.cpp
- *
- *  Created on: Apr 11, 2016
- *      Author: mamzi
- */
-
 #include "../benchmarks/ex5_eng_model.h"
 
 #define M_PI 3.14159265358979323846
 #define DIM 3
 
-bool eng_print = true;
-bool small_model = true;
-bool model_mod = true;
-bool diag = false;
-bool ghost_bc = true;
+static bool eng_print = true;
+static bool small_model = true;
+static bool model_mod = true;
+static bool diag = false;
+static bool ghost_bc = true;
 
 // RK4 temporary storage arrays
 static double *k1,*k2,*k3,*k4;
@@ -22,7 +15,6 @@ static double *k1,*k2,*k3,*k4;
 static unsigned int Nghost_top = 0;
 static unsigned int Nghost_bar = 0;
 static unsigned int Nghost_core = 0;
-static unsigned int Nghost_dbg = 0;
 
 static unsigned int n_bar;
 static unsigned int n_connector_bar_center;
@@ -159,7 +151,7 @@ static void apply_boundary_bar_bearing(particle* particles, double dt, double Qb
 	}
 }
 
-double eng_heat_perform_cpu3D(particle* particles, laplacian lap, double dt, unsigned int step) {
+double perform_eng_heat_euler_3D(particle* particles, METHOD method, double dt, unsigned int step) {
 	singleton_geometry *geometry = get_singleton_geometry();
 	unsigned int Ntot = geometry->n;
 
@@ -215,12 +207,12 @@ double eng_heat_perform_cpu3D(particle* particles, laplacian lap, double dt, uns
 	double T_avg_bar_surf  = compute_temp_bar_surf(particles,Ntot);
 
 	// 3. compute HEAT FLUX
-	double dTdt_inl_top = (1./(RHO_ALU*CP_ALU))*H_inl_top*dV_inl_top1*(T_avg_inlet_top-T_avg_con_top);
-	double dTdt_top_inl = (1./(RHO_PUR*CP_PUR))*H_inl_top*dV_con_top1*(T_avg_con_top-T_avg_inlet_top);
-	double dTdt_inl_bot = (1./(RHO_ALU*CP_ALU))*H_inl_bot*dV_inl_bot1*(T_avg_inlet_bot-T_avg_con_inlet);
-	double dTdt_bot_inl = (1./(RHO_ALU*CP_ALU))*H_inl_bot*dV_con_inl1*(T_avg_con_inlet-T_avg_inlet_bot);
-	double dTdt_bearing_bar =                   H_bearing*dV_con_bar_surf1*(T_avg_bearing-T_avg_bar_surf);
-	double dTdt_bar_bearing =                   H_bearing*dV_bar_surf1*(T_avg_bar_surf-T_avg_bearing);
+	double dTdt_inl_top = (1./(RHO_ALU*CP_ALU))*H_inl_top*dV_inl_top1*(T_avg_inlet_top - T_avg_con_top);
+	double dTdt_top_inl = (1./(RHO_PUR*CP_PUR))*H_inl_top*dV_con_top1*(T_avg_con_top - T_avg_inlet_top);
+	double dTdt_inl_bot = (1./(RHO_ALU*CP_ALU))*H_inl_bot*dV_inl_bot1*(T_avg_inlet_bot - T_avg_con_inlet);
+	double dTdt_bot_inl = (1./(RHO_ALU*CP_ALU))*H_inl_bot*dV_con_inl1*(T_avg_con_inlet - T_avg_inlet_bot);
+	double dTdt_bearing_bar =                   H_bearing*dV_con_bar_surf1*(T_avg_bearing - T_avg_bar_surf);
+	double dTdt_bar_bearing =                   H_bearing*dV_bar_surf1*(T_avg_bar_surf - T_avg_bearing);
 
 	// 4. apply BOUNDARY CONDITIONS
 	apply_boundary_inlet_top(particles,dt,dTdt_inl_top,Ntot);
@@ -231,7 +223,7 @@ double eng_heat_perform_cpu3D(particle* particles, laplacian lap, double dt, uns
 	apply_boundary_bar_bearing(particles,dt,dTdt_bar_bearing,Ntot);
 
 	// 5. compute LAPLACIAN
-	lap(particles);
+	laplacian_meshfree_method(particles,method);
 
 	// 6. integrate HEAT EQUATION
 	for (unsigned int i = 0; i < Ntot; i++) {
@@ -268,7 +260,7 @@ double eng_heat_perform_cpu3D(particle* particles, laplacian lap, double dt, uns
 	return totalT;
 }
 
-double eng_heat_perform_rk4_cpu3D(particle* particles, laplacian lap, double dt, unsigned int step) {
+double perform_eng_heat_rk4_3D(particle* particles, METHOD method, double dt, unsigned int step) {
 	singleton_geometry *geometry = get_singleton_geometry();
 	unsigned int Ntot = geometry->n;
 	double dt2 = 0.5*dt;
@@ -356,7 +348,7 @@ double eng_heat_perform_rk4_cpu3D(particle* particles, laplacian lap, double dt,
 	apply_boundary_bearing_bar(particles,dt,dTdt_bearing_bar,Ntot);
 	apply_boundary_bar_bearing(particles,dt,dTdt_bar_bearing,Ntot);
 	// 5. compute LAPLACIAN
-	lap(particles);
+	laplacian_meshfree_method(particles,method);
 	// 6. integrate HEAT EQUATION
 	for (unsigned int i = 0; i < Ntot; i++) {
 		if(particles[i].bnd || particles[i].label==HEAT_SINK || particles[i].label==TOP) continue;
@@ -393,7 +385,7 @@ double eng_heat_perform_rk4_cpu3D(particle* particles, laplacian lap, double dt,
 	apply_boundary_bearing_bar(particles,dt,dTdt_bearing_bar,Ntot);
 	apply_boundary_bar_bearing(particles,dt,dTdt_bar_bearing,Ntot);
 	// 5. compute LAPLACIAN
-	lap(particles);
+	laplacian_meshfree_method(particles,method);
 	// 6. integrate HEAT EQUATION
 	for (unsigned int i = 0; i < Ntot; i++) {
 		if(particles[i].bnd || particles[i].label==HEAT_SINK || particles[i].label==TOP) continue;
@@ -430,7 +422,7 @@ double eng_heat_perform_rk4_cpu3D(particle* particles, laplacian lap, double dt,
 	apply_boundary_bearing_bar(particles,dt,dTdt_bearing_bar,Ntot);
 	apply_boundary_bar_bearing(particles,dt,dTdt_bar_bearing,Ntot);
 	//	// 5. compute LAPLACIAN
-	lap(particles);
+	laplacian_meshfree_method(particles,method);
 	// 6. integrate HEAT EQUATION
 	for (unsigned int i = 0; i < Ntot; i++) {
 		if(particles[i].bnd || particles[i].label==HEAT_SINK || particles[i].label==TOP) continue;
@@ -467,7 +459,7 @@ double eng_heat_perform_rk4_cpu3D(particle* particles, laplacian lap, double dt,
 	apply_boundary_bearing_bar(particles,dt,dTdt_bearing_bar,Ntot);
 	apply_boundary_bar_bearing(particles,dt,dTdt_bar_bearing,Ntot);
 	// 5. compute LAPLACIAN
-	lap(particles);
+	laplacian_meshfree_method(particles,method);
 	// 6. integrate HEAT EQUATION
 	for (unsigned int i = 0; i < Ntot; i++) {
 		if(particles[i].bnd || particles[i].label==HEAT_SINK || particles[i].label==TOP) continue;
@@ -1846,192 +1838,6 @@ particle* eng_init3D(double hdy, unsigned int Nbnd, double *spacing) {
 	printf("=================================================================================================\n");
 
 	geometry->n = n_tot + Nghost;
-
-	return particles;
-}
-
-static void apply_boundary_dbg(particle* particles, double Tbnd) {
-	singleton_geometry *geometry = get_singleton_geometry();
-	unsigned int Ntot = geometry->n;
-
-	for (unsigned int i = 0; i < Ntot; i++) {
-		if (!particles[i].bnd) continue;
-		particles[i].f = Tbnd;
-	}
-}
-
-double eng_heat_perform_cpu3D_dbg(particle* particles, laplacian lap, double dt, unsigned int step) {
-	singleton_geometry *geometry = get_singleton_geometry();
-	unsigned int Ntot = geometry->n;
-
-	double totalT = 0.0;
-	double Tmin = +DBL_MAX;
-	double Tmax = -DBL_MAX;
-
-
-	// BC stuff
-	double sum_T_bnd = 0.0;
-
-	double xlm = +0.01166 + 0.5*0.00284;
-	double xhm = +0.05994 - 0.5*0.00284;
-	double ylm = -DBL_MAX;
-	double yhm = +DBL_MAX;
-	double zlm = +0.06846 + 0.5*0.00284;
-	double zhm = +0.10540 - 0.5*0.00284;
-
-	unsigned int iter = 0;
-	for (unsigned int i = 0; i < Ntot; i++) {
-		if (particles[i].label==CONNECTOR_TOP && !is_in_bounding_box(particles,i,xlm,xhm,ylm,yhm,zlm,zhm))
-		{
-			sum_T_bnd += particles[i].f;
-			iter++;
-		}
-	}
-	double Tbnd = sum_T_bnd/iter;
-	printf("Tbnd=%f\n",Tbnd);
-
-	apply_boundary_dbg(particles,Tbnd);
-	lap(particles);
-
-	for (unsigned int i = 0; i < Ntot; i++) {
-		if(particles[i].label==TOP) continue;
-
-		// main heat equation---------------------------------------------------------------------------------------
-		particles[i].f += dt*(particles[i].alpha*particles[i].LaplF);
-
-		assert(particles[i].f >= 20.0 && particles[i].f <= 26.0);
-
-		Tmin = fmin(Tmin,particles[i].f);
-		Tmax = fmax(Tmax,particles[i].f);
-
-		// total concentration
-		totalT += particles[i].f;
-	}
-
-	if (eng_print && step%5==0) {
-		printf("step=%d t=%0.3f sum=%0.3f Tmin=%f Tmax=%f\n",step, step*dt, totalT, Tmin, Tmax);
-	}
-	return totalT;
-}
-
-static void make_ghost_particles_dbg(particle* particles, unsigned int Ntot, unsigned int Nbnd, double hdy, double *dxp) {
-	// define dummy parameters
-	double rho = 1.0;
-
-	double *xghost,*yghost,*zghost;
-
-	// 1. calculate the particle spacing (e.g. check y direction)
-	unsigned int ip_start = 0;
-	double dy = 0;
-	for(unsigned int i = 0; i < (n_connector_top-1); i++) {
-		dy = fabs(particles[ip_start + i].py - particles[ip_start + (i+1)].py);
-
-		if (dy > 1e-3)
-			break;
-	}
-	*dxp = dy;
-
-	// 2. find the boundary coordinates
-	double max_x = -DBL_MAX;
-	double max_y = -DBL_MAX;
-	double max_z = -DBL_MAX;
-	double min_x = +DBL_MAX;
-	double min_y = +DBL_MAX;
-	double min_z = +DBL_MAX;
-	for (unsigned int i = 0; i < n_connector_top; i++) {
-		max_x  = fmax(max_x,particles[ip_start + i].px);
-		max_y  = fmax(max_y,particles[ip_start + i].py);
-		max_z  = fmax(max_z,particles[ip_start + i].pz);
-		min_x  = fmin(min_x,particles[ip_start + i].px);
-		min_y  = fmin(min_y,particles[ip_start + i].py);
-		min_z  = fmin(min_z,particles[ip_start + i].pz);
-	}
-
-	double lx = fabs(max_x - min_x);
-	double ly = fabs(max_y - min_y);
-	double lz = fabs(max_z - min_z);
-	unsigned int nx = lx/dy + 1;
-	unsigned int ny = ly/dy + 1;
-	unsigned int nz = lz/dy + 1;
-	unsigned int n_bulk = (nx+2*Nbnd)*(ny+2*Nbnd)*(nz+2*Nbnd);
-
-	xghost = (double*) calloc(n_bulk, sizeof(double));
-	yghost = (double*) calloc(n_bulk, sizeof(double));
-	zghost = (double*) calloc(n_bulk, sizeof(double));
-
-	// 3. generate bulk ghost particles
-	double Lbnd = (Nbnd)*dy;
-	for (unsigned int i = 0; i < (nx+2*Nbnd); i++) {
-		for (unsigned int j = 0; j < (ny+2*Nbnd); j++) {
-			for (unsigned int k = 0; k < (nz+2*Nbnd); k++) {
-				unsigned int ID = i*(ny+2*Nbnd)*(nz+2*Nbnd) + j*(nz+2*Nbnd) + k;
-
-				xghost[ID] = (min_x - Lbnd) + i*dy;
-				yghost[ID] = (min_y - Lbnd) + j*dy;
-				zghost[ID] = (min_z - Lbnd) + k*dy;
-			}
-		}
-	}
-
-	// 4. deduct from the main particles
-	unsigned int ip = 0;
-	for (unsigned int i = 0; i < n_bulk; i++) {
-		particles[Ntot + ip].bnd = false;
-		double r_min = +DBL_MAX;
-
-		for (unsigned int j = 0; j < n_connector_top; j++) {
-			double xtop = particles[ip_start + j].px;
-			double ytop = particles[ip_start + j].py;
-			double ztop = particles[ip_start + j].pz;
-
-			double rij = sqrt((xghost[i]-xtop)*(xghost[i]-xtop) + (yghost[i]-ytop)*(yghost[i]-ytop) + (zghost[i]-ztop)*(zghost[i]-ztop));
-
-			r_min = fmin(r_min,rij);
-		}
-
-		if (r_min >= 0.5*dy) {
-			particles[Ntot + ip].label = GHOST_TOP;
-			particles[Ntot + ip].bnd = true;
-			particles[Ntot + ip].blank = false;
-
-			particles[Ntot + ip].px = xghost[i];
-			particles[Ntot + ip].py = yghost[i];
-			particles[Ntot + ip].pz = zghost[i];
-
-			particles[Ntot + ip].rho = rho;
-			particles[Ntot + ip].m = rho*dy*dy*dy;
-			particles[Ntot + ip].h = hdy*dy;
-			particles[Ntot + ip].alpha = 1.0;
-			particles[Ntot + ip].f = 22.0;
-			particles[Ntot + ip].T = 0.0;
-
-			ip++;
-		}
-	}
-
-	free(xghost);
-	free(yghost);
-	free(zghost);
-
-	Nghost_dbg = ip;
-}
-
-particle* eng_init3D_dbg(double hdy) {
-	singleton_geometry *geometry = get_singleton_geometry();
-	particle* particles = (small_model) ? (particle*) calloc(100000, sizeof(particle)) : (particle*) calloc(200000,sizeof(particle));
-
-	// build the model
-	double dxp;
-	init_connector_top(particles,hdy,&dxp);
-	init_top(particles,hdy,&dxp);
-	unsigned int n_tot =  n_connector_top + n_top;
-	make_ghost_particles_dbg(particles,n_tot,2,hdy,&dxp);
-	unsigned int n_ghost = Nghost_dbg;
-
-	printf("debugger is running on %d physical + %d dummy particles\n", n_tot, n_ghost);
-	printf("=================================================================================================\n");
-
-	geometry->n = n_tot + n_ghost;
 
 	return particles;
 }

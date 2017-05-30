@@ -4,13 +4,13 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdbool.h>
 #include <time.h>
 
 #ifndef BENCHMARKS_H_
 #define BENCHMARKS_H_
 
-particle* setup_random_benchmark3D(unsigned int N);
-particle* setup_reconstruction_3D(unsigned int N, double hdx);
+particle* setup_reconstruction_polynomial_3D(unsigned int N, double hdx, bool RANDOM);
+particle* setup_reconstruction_trigonometric_3D(unsigned int N, double hdx, bool RANDOM);
 
 #endif /* BENCHMARKS_H_ */

@@ -849,10 +849,6 @@ void perform_nmfs(particle* particles) {
 	}
 }
 
-void nmfs_set_kernel(kernel kernel_fun) {
-	_kernel = kernel_fun;
-}
-
 void nmfs_init(unsigned int Ntot, kernel kernel_fun) {
 	//first derivatives
 	B    = (double*) calloc(Ntot*3*3, sizeof(double));

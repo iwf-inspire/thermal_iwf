@@ -16,7 +16,6 @@
 
 void rkpm_compute_correction_terms(particle* particles);
 void perform_rkpm(particle* particles);
-void rkpm_set_kernel(kernel kernel_fun);
 void rkpm_init(unsigned int num_part, kernel kernel_fun);
 void rkpm_wipe_out();
 
