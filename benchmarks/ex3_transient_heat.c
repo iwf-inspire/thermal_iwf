@@ -11,10 +11,6 @@ static bool is_edge1 (unsigned int i, unsigned int j, unsigned int k, unsigned i
 	return i == 0 || j == 0 || k == 0 || i == N-1 || j == N-1 || k == N-1;
 }
 
-static bool is_edge2 (unsigned int i, unsigned int j, unsigned int k, unsigned int N) {
-	return i == 1 || j == 1 || k == 1 || i == N-2 || j == N-2 || k == N-2;
-}
-
 static double solution_transient(double r2, double t, double alpha) {
 	return exp(-r2/(4.0*alpha*t))/((4.0*M_PI*alpha*t)*sqrt(4.*M_PI*alpha*t));
 }
@@ -44,18 +40,6 @@ void transient_print_errors_3D(particle* particles, double t, unsigned int Ntot)
 	printf("Linf=%e; L2=%e; EC=%e; \n",L_inf,L_2,EC);
 }
 
-static void plot_results(particle* particles, unsigned int Ntot, unsigned int step) {
-	char fname[256];
-	sprintf(fname,"step_%04d.txt",step);
-	FILE *fp = fopen(fname,"w+");
-
-	for (unsigned int i = 0; i < Ntot; i++) {
-		if(!particles[i].bnd)
-		fprintf(fp,"%e %e %e %e\n",particles[i].px, particles[i].py, particles[i].pz, particles[i].f);
-	}
-	fclose(fp);
-}
-
 void perform_transient_heat_euler_3D(particle* particles, METHOD method, double dt, unsigned int step, unsigned int Ntot) {
 
 	laplacian_meshfree_method(particles,method);
@@ -66,15 +50,10 @@ void perform_transient_heat_euler_3D(particle* particles, METHOD method, double 
 			// update TEMPERATURE------------------------------------------
 			particles[i].f += particles[i].alpha * particles[i].LaplF * dt;
 		}
-
 		// total concentration
-		if (trans_print) totalT += particles[i].f;
+		totalT += particles[i].f;
 	}
-
-	if (trans_print  && step%1==0) {
-		plot_results(particles,Ntot,step);
-		printf("sum=%e \n",totalT);
-	}
+	printf("sum=%e \n",totalT);
 }
 
 void perform_transient_heat_rk4_3D(particle* particles, METHOD method, double dt, unsigned int step, unsigned int Ntot) {
@@ -122,7 +101,7 @@ void perform_transient_heat_rk4_3D(particle* particles, METHOD method, double dt
 		}
 	}
 
-	// update TEMPERATURE-------------------------------------------------------------------------
+	// update TEMPERATURE-------------------------------------------------------------------
 	double totalT = 0.;
 	for (unsigned int i = 0; i < Ntot; i++) {
 		if(!particles[i].bnd) {
@@ -133,10 +112,7 @@ void perform_transient_heat_rk4_3D(particle* particles, METHOD method, double dt
 		if (trans_print) totalT += particles[i].f;
 	}
 
-	if (trans_print) {
-		plot_results(particles,Ntot,step);
-		printf("sum=%e \n",totalT);
-	}
+	printf("sum=%e \n",totalT);
 
 	free(k1);
 	free(k2);
@@ -192,10 +168,11 @@ particle* transient_init3D(unsigned int N, double hdx, bool RANDOM) {
 				particles[ID].T = 0.0;
 				particles[ID].f = solution_transient(x2+y2+z2,t_init,particles[ID].alpha);
 
+				particles[ID].label = NORMAL;
 				particles[ID].bnd   = false;
 				particles[ID].blank = false;
 
-				if (is_edge1(i,j,k,N) || is_edge2(i,j,k,N)) {
+				if (is_edge1(i,j,k,N)) {
 					particles[ID].bnd = true;
 				}
 			}

@@ -19,9 +19,7 @@ void perform_pse(particle* particles) {
 		int high_k = gk+2 > grid_geom->nz ? grid_geom->nz : gk+2;
 
 		for (unsigned int i = grid_geom->cell_start[b]; i < grid_geom->cell_end[b]; i++) {
-
-			if (particles[i].bnd) continue;
-			//if (particles[i].bnd || particles[i].label==HEAT_SINK) continue;
+			if (particles[i].bnd || particles[i].label==HEAT_SINK) continue;
 
 			double xi  = particles[i].px;
 			double yi  = particles[i].py;
@@ -45,13 +43,13 @@ void perform_pse(particle* particles) {
 
 						for (unsigned int j = grid_geom->cell_start[ID]; j < grid_geom->cell_end[ID]; j++) {
 
-//							if (particles[i].label==INLET && particles[j].label!=INLET) continue;
-//							if (particles[i].label==CONNECTOR_TOP && particles[j].label==INLET) continue;
-//							if (particles[i].label==CONNECTOR_INLET && particles[j].label==INLET) continue;
-//							if (particles[i].label==CONNECTOR_TOP && particles[j].label==CONNECTOR_INLET) continue;
-//							if (particles[i].label==CONNECTOR_INLET && particles[j].label==CONNECTOR_TOP) continue;
-//							if (particles[i].label==BAR && particles[j].label==CONNECTOR_BAR_CENTER) continue;
-//							if (particles[i].label==CONNECTOR_BAR_CENTER && particles[j].label==BAR) continue;
+							if (particles[i].label==INLET && particles[j].label!=INLET) continue;
+							if (particles[i].label==CONNECTOR_TOP && particles[j].label==INLET) continue;
+							if (particles[i].label==CONNECTOR_INLET && particles[j].label==INLET) continue;
+							if (particles[i].label==CONNECTOR_TOP && particles[j].label==CONNECTOR_INLET) continue;
+							if (particles[i].label==CONNECTOR_INLET && particles[j].label==CONNECTOR_TOP) continue;
+							if (particles[i].label==BAR && particles[j].label==CONNECTOR_BAR_CENTER) continue;
+							if (particles[i].label==CONNECTOR_BAR_CENTER && particles[j].label==BAR) continue;
 
 							double xj   = particles[j].px;
 							double yj   = particles[j].py;

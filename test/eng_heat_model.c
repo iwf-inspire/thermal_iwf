@@ -5,8 +5,9 @@ static bool rk4 = false;
 
 static void plot_eng(particle* particles, unsigned int Ntot, unsigned int step) {
 	char fname[256];
-	sprintf(fname,"step_%05d.txt",step);
+	sprintf(fname,"./images/heat_step_%05d.txt",step);
 	FILE *fp = fopen(fname,"w+");
+
 	for (unsigned int i = 0; i < Ntot; i++) {
 		if(!particles[i].bnd)
 			fprintf(fp,"%e %e %e %e %d\n",particles[i].px, particles[i].py, particles[i].pz, particles[i].f, particles[i].label);
@@ -39,12 +40,10 @@ void run_eng_model_3D(METHOD method) {
 	initialize_meshfree_method(particles,method,kernel_func,Ntot);
 	correction_terms_meshfree_method(particles,method);
 
-	printf("CORRECTION TERMS COMPUTED SUCCESSFULLY....SIMULATION WITH IS GETTING STARTED\n\n");
-
-	double dt = 0.5*dx*dx/alpha_max;
+	double dt = 0.25*dx*dx/alpha_max;
 	double t_init = 0.;
 	unsigned int step = 0;
-	double totalT_old;
+	double totalT_old = 0;
 	double totalT = 0;
 	double eps = 5e-3;
 	double change = 1;
@@ -52,16 +51,17 @@ void run_eng_model_3D(METHOD method) {
 	while(step<MAX_STEPS && change>eps) {
 		totalT_old = totalT;
 
-		if(rk4) totalT = perform_eng_heat_rk4_3D  (particles,method,dt,step);
-		else    totalT = perform_eng_heat_euler_3D(particles,method,dt,step);
-
-		step++;
-		change = totalT - totalT_old;
-
 		if((step)%100==0) {
 			printf("total change=%0.3f\n",change);
 			plot_eng(particles,Ntot,step);
 		}
+
+		step++;
+
+		if(rk4) totalT = perform_eng_heat_rk4_3D  (particles,method,dt,step);
+		else    totalT = perform_eng_heat_euler_3D(particles,method,dt,step);
+
+		change = totalT - totalT_old;
 	}
 
 	grid_restore(particles);

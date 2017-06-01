@@ -64,18 +64,6 @@ static void apply_boundary(particle* particles, unsigned int N, unsigned int Nbn
 	}
 }
 
-static void plot_results(particle* particles, unsigned int Ntot, unsigned int step) {
-	char fname[256];
-	sprintf(fname,"step_%04d.txt",step);
-	FILE *fp = fopen(fname,"w+");
-
-	for (unsigned int i = 0; i < Ntot; i++) {
-		if(!particles[i].bnd)
-		fprintf(fp,"%e %e %e %e\n",particles[i].px, particles[i].py, particles[i].pz, particles[i].f);
-	}
-	fclose(fp);
-}
-
 void perform_steady_heat_euler_3D(particle* particles, METHOD method, double dt, unsigned int step, unsigned int N, unsigned int Nbnd) {
 	unsigned int NN = N + 2*Nbnd;
 	unsigned int Ntot = NN*NN*NN;
@@ -98,13 +86,10 @@ void perform_steady_heat_euler_3D(particle* particles, METHOD method, double dt,
 		}
 	}
 
-	if (steady_print && step%40==0) {
-		plot_results(particles,Ntot,step);
-		printf("step=%d  sum=%e\n",step,totalT);
-	}
+	printf("step=%d  sum=%e\n",step,totalT);
 }
 
-void steady_heat_perform_rk4_cpu3D(particle* particles, METHOD method, double dt, unsigned int step, unsigned int N, unsigned int Nbnd) {
+void perform_steady_heat_rk4_3D(particle* particles, METHOD method, double dt, unsigned int step, unsigned int N, unsigned int Nbnd) {
 	double dt2 = 0.5*dt;
 
 	unsigned int NN = N + 2*Nbnd;
@@ -171,10 +156,7 @@ void steady_heat_perform_rk4_cpu3D(particle* particles, METHOD method, double dt
 
 	}
 
-	if (steady_print) {
-		plot_results(particles,N3,step);
-		printf("step=%d  sum=%e\n",step,totalT);
-	}
+	printf("step=%d  sum=%e\n",step,totalT);
 
 	free(k1);
 	free(k2);
@@ -224,13 +206,17 @@ particle* steady_init3D(unsigned int N, unsigned int Nbnd, double hdx, bool RAND
 				particles[ID].px = x+ddx*dx;
 				particles[ID].py = y+ddy*dx;
 				particles[ID].pz = z+ddz*dx;
+
 				particles[ID].rho = rho;
 				particles[ID].m = m;
 				particles[ID].h = hdx*dx;
 				particles[ID].alpha = alpha;
+
 				particles[ID].anal = solution_steady(Tamp,Tbnd,particles[ID].px,particles[ID].py,particles[ID].pz);
 				particles[ID].f = 0.0;
 				particles[ID].T = 0.0;
+
+				particles[ID].label = NORMAL;
 				particles[ID].bnd   = false;
 				particles[ID].blank = false;
 

@@ -233,7 +233,7 @@ double perform_eng_heat_euler_3D(particle* particles, METHOD method, double dt, 
 		double Ta = particles[i].f;
 		double Q_air = (particles[i].air_surf) ? H_air*dV_air_surf1*(Ta-Tb) : 0.0;
 
-		// main heat equation---------------------------------------------------------------------------------------
+		// main heat equation-----------------------------------------------------------------------------------
 		particles[i].f += dt*(particles[i].alpha*particles[i].LaplF - Q_air);
 
 		assert(particles[i].f >= 21.0 && particles[i].f <= 26.0);
@@ -245,7 +245,7 @@ double perform_eng_heat_euler_3D(particle* particles, METHOD method, double dt, 
 		totalT += particles[i].f;
 	}
 
-	if (eng_print && step%100==0) {
+	if (eng_print && step%10==0) {
 		printf("step=%d t=%0.3f sum=%0.3f Tmin=%f Tmax=%f\n",step, step*dt, totalT, Tmin, Tmax);
 		if(diag) {
 			printf("T_avg_inlet_top=%0.3f T_avg_con_top=%0.3f\n",T_avg_inlet_top,T_avg_con_top);
@@ -484,7 +484,7 @@ double perform_eng_heat_rk4_3D(particle* particles, METHOD method, double dt, un
 		totalT += particles[i].f;
 	}
 
-	if (eng_print && step%50==0) {
+	if (eng_print && step%10==0) {
 		printf("step=%d t=%0.3f sum=%0.3f Tmin=%f Tmax=%f\n",step, step*dt, totalT, Tmin, Tmax);
 		if(diag) {
 			printf("T_avg_inlet_top=%0.3f T_avg_con_top=%0.3f\n",T_avg_inlet_top,T_avg_con_top);
@@ -508,11 +508,11 @@ static void init_top(particle *particles, double hdy, double *dx1) {
 	FILE *file;
 
 	if (model_mod)
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/top_mod.txt", "r");
-		else             file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_checked_smaller/top_mod.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/top_mod.txt", "r");
+		else             file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_checked_smaller/top_mod.txt", "r");
 	else
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_small/top.txt", "r");
-		else             file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_large/top.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_small/top.txt", "r");
+		else             file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_large/top.txt", "r");
 
 	if (file == NULL) {
 		printf("Error: input file cannot be found!");
@@ -605,11 +605,11 @@ static void init_connector_top(particle *particles, double hdy, double *dx2) {
 	FILE *file;
 
 	if (model_mod)
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/connector_top_mod.txt", "r");
-		else             file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_checked_smaller/connector_top_mod.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/connector_top_mod.txt", "r");
+		else             file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_checked_smaller/connector_top_mod.txt", "r");
 	else
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_small/connector_top.txt", "r");
-		else		     file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_large/connector_top.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_small/connector_top.txt", "r");
+		else		     file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_large/connector_top.txt", "r");
 
 	if (file == NULL) {
 		printf("Error: input file cannot be found!");
@@ -705,11 +705,11 @@ static void init_inlet(particle *particles, double hdy, double *dx3) {
 	FILE *file;
 
 	if (model_mod)
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/inlet_mod.txt", "r");
-		else             file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_checked_smaller/inlet_mod.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/inlet_mod.txt", "r");
+		else             file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_checked_smaller/inlet_mod.txt", "r");
 	else
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_small/inlet.txt", "r");
-		else 			 file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_large/inlet.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_small/inlet.txt", "r");
+		else 			 file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_large/inlet.txt", "r");
 
 	if (file == NULL) {
 		printf("Error: input file cannot be found!");
@@ -843,11 +843,11 @@ static void init_connector_inlet(particle *particles, double hdy, double *dx4) {
 	FILE *file;
 
 	if (model_mod)
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/connector_inlet_mod.txt", "r");
-		else             file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_checked_smaller/connector_inlet_mod.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/connector_inlet_mod.txt", "r");
+		else             file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_checked_smaller/connector_inlet_mod.txt", "r");
 	else
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_small/connector_inlet.txt", "r");
-		else 			 file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_large/connector_inlet.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_small/connector_inlet.txt", "r");
+		else 			 file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_large/connector_inlet.txt", "r");
 
 	if (file == NULL) {
 		printf("Error: input file cannot be found!");
@@ -943,11 +943,11 @@ static void init_connector_bar_center(particle *particles, double hdy, double *d
 	FILE *file;
 
 	if (model_mod)
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/connector_bar_center_mod.txt", "r");
-		else             file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_checked_smaller/connector_bar_center_mod.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/connector_bar_center_mod.txt", "r");
+		else             file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_checked_smaller/connector_bar_center_mod.txt", "r");
 	else
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_small/connector_bar_center.txt", "r");
-		else             file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_large/connector_bar_center.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_small/connector_bar_center.txt", "r");
+		else             file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_large/connector_bar_center.txt", "r");
 
 	if (file == NULL) {
 		printf("Error: input file cannot be found!");
@@ -1046,11 +1046,11 @@ static void init_bar(particle *particles, double hdy, double *dx6) {
 	FILE *file;
 
 	if (model_mod)
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/bar_mod.txt", "r");
-		else             file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_checked_smaller/bar_mod.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/bar_mod.txt", "r");
+		else             file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_checked_smaller/bar_mod.txt", "r");
 	else
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_small/bar.txt", "r");
-		else             file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_large/bar.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_small/bar.txt", "r");
+		else             file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_large/bar.txt", "r");
 
 	if (file == NULL) {
 		printf("Error: input file cannot be found!");
@@ -1176,11 +1176,11 @@ static void init_cross_1(particle *particles, double hdy, double *dx7) {
 	FILE *file;
 
 	if (model_mod)
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/cross_1_mod.txt", "r");
-		else             file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_checked_smaller/cross_1_mod.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/cross_1_mod.txt", "r");
+		else             file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_checked_smaller/cross_1_mod.txt", "r");
 	else
-		if (small_model)file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_small/cross_1.txt", "r");
-		else 	    	file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_large/cross_1.txt", "r");
+		if (small_model)file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_small/cross_1.txt", "r");
+		else 	    	file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_large/cross_1.txt", "r");
 
 	if (file == NULL) {
 		printf("Error: input file cannot be found!");
@@ -1244,11 +1244,11 @@ static void init_cross_2(particle *particles, double hdy, double *dx8) {
 	FILE *file;
 
 	if (model_mod)
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/cross_2_mod.txt", "r");
-		else             file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_checked_smaller/cross_2_mod.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/cross_2_mod.txt", "r");
+		else             file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_checked_smaller/cross_2_mod.txt", "r");
 	else
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_small/cross_2.txt", "r");
-		else 			 file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_large/cross_2.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_small/cross_2.txt", "r");
+		else 			 file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_large/cross_2.txt", "r");
 
 	if (file == NULL) {
 		printf("Error: input file cannot be found!");
@@ -1312,11 +1312,11 @@ static void init_connector_heat_sink(particle *particles, double hdy, double *dx
 	FILE *file;
 
 	if (model_mod)
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/connector_heat_sink_mod.txt", "r");
-		else             file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_checked_smaller/connector_heat_sink_mod.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/connector_heat_sink_mod.txt", "r");
+		else             file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_checked_smaller/connector_heat_sink_mod.txt", "r");
 	else
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_small/connector_heat_sink.txt", "r");
-		else             file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_large/connector_heat_sink.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_small/connector_heat_sink.txt", "r");
+		else             file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_large/connector_heat_sink.txt", "r");
 
 	if (file == NULL) {
 		printf("Error: input file cannot be found!");
@@ -1381,11 +1381,11 @@ static void init_heat_sink(particle *particles, double hdy, double *dx10) {
 	FILE *file;
 
 	if (model_mod)
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/heat_sink_mod_simpl.txt", "r");
-		else             file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_checked_smaller/heat_sink_mod.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_smallest_simpl_heatsink/heat_sink_mod_simpl.txt", "r");
+		else             file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_checked_smaller/heat_sink_mod.txt", "r");
 	else
-		if (small_model) file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_small/heat_sink.txt", "r");
-		else 			 file = fopen("/home/mamzi/Desktop/my publications/Model_For_Engineering_Case/ascii_large/heat_sink.txt", "r");
+		if (small_model) file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_small/heat_sink.txt", "r");
+		else 			 file = fopen("/home/mamzi/Desktop/MY_PUBLICATIONS/Model_For_Engineering_Case/ascii_large/heat_sink.txt", "r");
 
 	if (file == NULL) {
 		printf("Error: input file cannot be found!");
@@ -1647,7 +1647,6 @@ static void make_ghost_particles_core(particle* particles, unsigned int Ntot, un
 			r_min = fmin(r_min,rij);
 		}
 
-		//if (r_min>=0.5*dy && !(zghost[i]<(0.03722-0.5*dy) || zghost[i]>(0.1054+0.5*dy))) {
 		if (r_min>=0.5*dy && !(zghost[i]>(0.1054+0.5*dy))) {
 			particles[Ntot + Nghost_top + ip].label = GHOST_CORE;
 			particles[Ntot + Nghost_top + ip].bnd = true;
@@ -1751,7 +1750,6 @@ static void make_ghost_particles_bar(particle* particles, unsigned int Ntot, uns
 			r_min = fmin(r_min,rij);
 		}
 
-		//if (r_min>=0.5*dy && !(zghost[i]<(0.02018-0.5*dy))) {
 		if (r_min>=0.5*dy) {
 			particles[Ntot + Nghost_top + Nghost_core + ip].label = GHOST_BAR;
 			particles[Ntot + Nghost_top + Nghost_core + ip].bnd = true;
@@ -1833,8 +1831,7 @@ particle* eng_init3D(double hdy, unsigned int Nbnd, double *spacing) {
 	}
 	unsigned int Nghost = Nghost_bar + Nghost_core + Nghost_top;
 
-
-	printf("3D engineering simulation is running on %d physical particles + %d dummy particles\n", n_tot, Nghost);
+	printf("3D engineering simulation is running on %d physical particles + %d ghost particles\n", n_tot, Nghost);
 	printf("=================================================================================================\n");
 
 	geometry->n = n_tot + Nghost;

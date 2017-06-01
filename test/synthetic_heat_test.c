@@ -1,10 +1,10 @@
 #include "synthetic_heat_test.h"
 
-static bool rk4 = false;
+static bool rk4 = true;
 
-static void plot_results(particle* particles, unsigned int Ntot, unsigned int step) {
+static void plot_results_heat(particle* particles, unsigned int Ntot, unsigned int step) {
 	char fname[256];
-	sprintf(fname,"step_%04d.txt",step);
+	sprintf(fname,"./images/heat_step_%04d.txt",step);
 	FILE *fp = fopen(fname,"w+");
 
 	for (unsigned int i = 0; i < Ntot; i++) {
@@ -29,7 +29,7 @@ void run_transient_heat_3D(METHOD method, unsigned int N, bool RANDOM) {
 	L = 10.;
 	hdx = 1.5;
 	alpha = 1.0;
-	dt = 0.2*(L/(N-1))*(L/(N-1))/alpha;
+	dt = 0.25*(L/(N-1))*(L/(N-1))/alpha;
 	t_init = 0.1;
 	t_final = 0.3;
 	step = 1;
@@ -63,7 +63,7 @@ void run_transient_heat_3D(METHOD method, unsigned int N, bool RANDOM) {
 
 	transient_print_errors_3D(particles,t-dt,Ntot);
 	grid_restore(particles);
-	plot_results(particles,Ntot,step);
+	plot_results_heat(particles,Ntot,step);
 	methods_wipe_out();
 }
 
@@ -73,10 +73,9 @@ void run_steady_heat_3D(METHOD method, unsigned int N, bool RANDOM) {
 	// parameters *************************************************
 	unsigned int Nbnd, NN, Ntot;
 	double L, alpha, hdx;
-	double Tamp, Tbnd;
 	double dt, t_init, t_final;
 	unsigned int step;
-	// *************************************************************
+	// ************************************************************
 
 	// steady settings
 	Nbnd = 2;
@@ -85,9 +84,7 @@ void run_steady_heat_3D(METHOD method, unsigned int N, bool RANDOM) {
 	L = 1.0;
 	hdx = 1.5;
 	alpha = 1.0;
-	Tamp = 1.0;
-	Tbnd = 0.0;
-	dt = 0.5*(L/(N-1))*(L/(N-1))/alpha;
+	dt = 0.25*(L/(N-1))*(L/(N-1))/alpha;
 	t_init = 0.0;
 	t_final = 1.0;
 	step = 1;
@@ -111,16 +108,16 @@ void run_steady_heat_3D(METHOD method, unsigned int N, bool RANDOM) {
 	double t = t_init;
 	while(t <= t_final) {
 		// solve the heat conduction equation
-		if(rk4) perform_steady_heat_rk4_3D  (particles,method,dt,step,Ntot,Nbnd);
-		else    perform_steady_heat_euler_3D(particles,method,dt,step,Ntot,Nbnd);
+		if(rk4) perform_steady_heat_rk4_3D  (particles,method,dt,step,N,Nbnd);
+		else    perform_steady_heat_euler_3D(particles,method,dt,step,N,Nbnd);
 
 		step ++;
 		printf("t=%f\n",t);
 		t += dt;
 	}
 
-	steady_print_errors_3D(particles,t-dt,Ntot);
+	steady_print_errors_3D(particles,N,Nbnd);
 	grid_restore(particles);
-	plot_results(particles,Ntot,step);
+	plot_results_heat(particles,Ntot,step);
 	methods_wipe_out();
 }

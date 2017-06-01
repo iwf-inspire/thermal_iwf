@@ -2,11 +2,22 @@
 #include "../test/reconstruction_test.h"
 #include "../test/synthetic_heat_test.h"
 
+/*
+ * ********************************************************************
+ *              The source code of the following paper:
+ *
+ * "Contemporary Mesh-free Methods for 3D Heat Conduction Problems"
+ *                       Version 1.1.0 2017
+ *                          M. Afrasiabi
+ *                           ETH Zurich
+ * ********************************************************************
+ */
+
 int main(void) {
 	// choose your mesh-free scheme among: {SPH, PSE, RKPM, CSPM, NMFS}
-	const char meshfree_method = NMFS;
+	const char meshfree_method = RKPM;
 	// define the number of particles in one direction
-	unsigned int Nx = 21;
+	unsigned int Nx = 11;
 
 	// ******************************
 	// example 1: polynomial function

@@ -2,11 +2,11 @@
 
 static void plot_results_reconstruction(particle* particles, unsigned int Ntot) {
 	char fname[256];
-	sprintf(fname,"reconstructiopn_results.txt");
+	sprintf(fname,"./images/reconstructiopn_results.txt");
 	FILE *fp = fopen(fname,"w+");
 
 	for (unsigned int i = 0; i < Ntot; i++) {
-		fprintf(fp,"%e %e %e %e\n",particles[i].px, particles[i].py, particles[i].pz, particles[i].f);
+		fprintf(fp,"%e %e %e %e\n",particles[i].px, particles[i].py, particles[i].pz, particles[i].LaplF);
 	}
 	fclose(fp);
 }
@@ -17,12 +17,12 @@ static void print_errors_reconstruction(particle* particles, unsigned int Ntot) 
 	double EC = 0.;
 
 	for (unsigned int i = 0; i < Ntot; i++) {
-		if(particles[i].bnd) continue;
+		if (particles[i].bnd) continue;
 
-		double err = fabs(particles[i].LaplF - particles[i].anal);
-		L_inf = fmax(L_inf,err);
+		double err = (particles[i].LaplF - particles[i].anal);
+		L_inf = fmax(L_inf,fabs(err));
 		L_2  += err*err;
-		EC   += err;
+		EC   += fabs(err);
 	}
 	L_2 = sqrt(L_2/Ntot);
 	EC /= Ntot;
@@ -53,7 +53,7 @@ void run_reconstrunction_polynomial_3D(METHOD method, unsigned int N, bool RANDO
 
 	// output
 	plot_results_reconstruction(particles,Ntot);
-	print_errors_reconstruction(particles,N);
+	print_errors_reconstruction(particles,Ntot);
 }
 
 void run_reconstrunction_trigonometric_3D(METHOD method, unsigned int N, bool RANDOM) {
@@ -63,7 +63,7 @@ void run_reconstrunction_trigonometric_3D(METHOD method, unsigned int N, bool RA
 	double hdx = 1.5;
 
 	// choose your smoothing kernel
-	kernel kernel_func  = &gaussian3D;
+	kernel kernel_func  = &cubic_spline3D;
 	particle* particles = setup_reconstruction_trigonometric_3D(N,hdx,RANDOM);
 
 	// construct the cell list
@@ -79,5 +79,5 @@ void run_reconstrunction_trigonometric_3D(METHOD method, unsigned int N, bool RA
 
 	// output
 	plot_results_reconstruction(particles,Ntot);
-	print_errors_reconstruction(particles,N);
+	print_errors_reconstruction(particles,Ntot);
 }

@@ -10,7 +10,9 @@
 #include <string.h>
 
 typedef enum labels {
-	// physical particles
+	// general particles
+	NORMAL,
+	// ENG example - physical particles
 	TOP,
 	CONNECTOR_TOP,
 	INLET,
@@ -21,7 +23,7 @@ typedef enum labels {
 	CROSS_2,
 	CONNECTOR_HEAT_SINK,
 	HEAT_SINK,
-	// non-physical particles
+	// ENG example - non-physical particles
 	GHOST_BAR,
 	GHOST_TOP,
 	GHOST_CORE
