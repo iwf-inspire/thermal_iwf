@@ -170,7 +170,6 @@ particle* transient_init3D(unsigned int N, double hdx, bool RANDOM) {
 
 				particles[ID].label = NORMAL;
 				particles[ID].bnd   = false;
-				particles[ID].blank = false;
 
 				if (is_edge1(i,j,k,N)) {
 					particles[ID].bnd = true;

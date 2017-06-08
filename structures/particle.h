@@ -23,7 +23,7 @@ typedef enum labels {
 	CROSS_2,
 	CONNECTOR_HEAT_SINK,
 	HEAT_SINK,
-	// ENG example - non-physical particles
+	// ENG example - nonphysical particles
 	GHOST_BAR,
 	GHOST_TOP,
 	GHOST_CORE
@@ -50,32 +50,15 @@ typedef struct particle {
 	double StrengthBC;
 	double h;
 
+	// cell-list stuff
 	unsigned int part_id;
-	unsigned int hash,nnbh;	 // cell hash
-
-	double rho0;		// initial density (needed if initially particles are not spaced regularly)
-	double rho_a;
-
-	double vx_x;		// velocity gradient
-	double vx_y;
-	double vx_z;
-	double vy_x;
-	double vy_y;
-	double vy_z;
-	double vz_x;
-	double vz_y;
-	double vz_z;
-
-	double alpha;       // diffusion coefficient
-
-	bool bnd,blank;		// flags for boundary and blanking
-	// bnd: means that the particle does not act as destination particle
-	// blank: means that the particle does neither act as a source nor destination term
-	// this means the particle is effectively removed from the simulation
-
+	unsigned int hash,nnbh;
+	// diffusion coefficient
+	double alpha;
+	// flag for boundary
+	bool bnd;
 	// distortion
 	double Ht;
-
 	// engineering model
 	labels label;
 

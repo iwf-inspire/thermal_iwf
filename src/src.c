@@ -15,7 +15,7 @@
 
 int main(void) {
 	// choose your mesh-free scheme among: {SPH, PSE, RKPM, CSPM, NMFS}
-	const char meshfree_method = RKPM;
+	const char meshfree_method = NMFS;
 	// define the number of particles in one direction
 	unsigned int Nx = 11;
 

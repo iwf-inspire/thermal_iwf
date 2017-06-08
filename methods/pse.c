@@ -34,7 +34,7 @@ void perform_pse(particle* particles) {
 			double f_z  = 0.;
 			double f_lapl3 = 0.;
 
-			//loop over neighbors
+			// loop over neighbors
 			for (unsigned int ni = low_i; ni < high_i; ni++) {
 				for (unsigned int nj = low_j; nj < high_j; nj++) {
 					for (unsigned int nk = low_k; nk < high_k; nk++) {

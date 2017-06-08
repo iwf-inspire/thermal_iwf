@@ -44,7 +44,6 @@ particle* setup_reconstruction_polynomial_3D(unsigned int N, double hdx, bool RA
 
 				particles[ID].label = NORMAL;
 				particles[ID].bnd   = false;
-				particles[ID].blank = false;
 			}
 		}
 	}
@@ -97,8 +96,6 @@ particle* setup_reconstruction_trigonometric_3D(unsigned int N, double hdx, bool
 
 				particles[ID].label = NORMAL;
 				particles[ID].bnd   = false;
-				particles[ID].blank = false;
-
 			}
 		}
 	}

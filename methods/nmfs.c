@@ -164,7 +164,6 @@ void nmfs_compute_correction_terms(particle* particles) {
 			double F2133 = 0.f; double F2233 = 0.f; double F2333 = 0.f;
 			double F3133 = 0.f; double F3233 = 0.f; double F3333 = 0.f;
 
-
 			//loop over neighbors
 			for (unsigned int ni = low_i; ni < high_i; ni++) {
 				for (unsigned int nj = low_j; nj < high_j; nj++) {
@@ -360,7 +359,7 @@ void nmfs_compute_correction_terms(particle* particles) {
 					  		  b21,b22,b23,
 							  b31,b32,b33};
 
-			// B: re-normalization tensor (i.e. Eq(60) from Fatehi's paper)
+			// B: re-normalization tensor
 			inv3x3(bMAT,binv);
 
 			B11 = -binv[0]; B12 = -binv[1]; B13 = -binv[2];
@@ -645,14 +644,6 @@ void nmfs_compute_correction_terms(particle* particles) {
 			F2133=E2133+D2133; F2233=E2233+D2233; F2333=E2333+D2333;
 			F3133=E3133+D3133; F3233=E3233+D3233; F3333=E3333+D3333;
 
-			/*
-			    B_hat calculation by solving a system of 6-linear equations (i.e. Eq(40) from Fatehi paper)
-
-			    in Eq(41) from Fatehi paper: B_hat:F = -I
-			    in which: B_hat is 2nd order tensor, F is 4th order tensor and I is 2nd order unity tensor.
-			    due to symmetry, the system of equations can be reduced
-			    so the rank is 6 (not 9!)
-			 */
 
 			double G[36] = {F1111, 2.*F1211, 2.*F1311, F2211, 2.*F2311, F3311,
 							F1112, 2.*F1212, 2.*F1312, F2212, 2.*F2312, F3312,
@@ -686,7 +677,7 @@ void perform_nmfs(particle* particles) {
 	singleton_geometry  *grid_geom  = get_singleton_geometry();
 
 	for (unsigned int b = 0; b < grid_geom->num_cell; b++) {
-		//finding neighbors
+		// finding neighbors
 		int gi = 0;
 		int gj = 0;
 		int gk = 0;
@@ -714,7 +705,7 @@ void perform_nmfs(particle* particles) {
 			double F2 = 0.f;
 			double F3 = 0.f;
 
-			//loop over neighbors
+			// loop over neighbors
 			for (unsigned int ni = low_i; ni < high_i; ni++) {
 				for (unsigned int nj = low_j; nj < high_j; nj++) {
 					for (unsigned int nk = low_k; nk < high_k; nk++) {
@@ -766,12 +757,12 @@ void perform_nmfs(particle* particles) {
 			particles[i].f_y = der_y;
 			particles[i].f_z = der_z;
 
-			// rhs terms for 2nd derivatives & of Laplacian
+			// RHS terms for 2nd derivatives of Laplacian
 			double fac11 = 0.f; double fac12 = 0.f; double fac13 = 0.f;
 			double fac21 = 0.f; double fac22 = 0.f; double fac23 = 0.f;
 			double fac31 = 0.f; double fac32 = 0.f; double fac33 = 0.f;
 
-			//loop over neighbors
+			// loop over neighbors
 			for (unsigned int ni = low_i; ni < high_i; ni++) {
 				for (unsigned int nj = low_j; nj < high_j; nj++) {
 					for (unsigned int nk = low_k; nk < high_k; nk++) {
@@ -810,7 +801,7 @@ void perform_nmfs(particle* particles) {
 
 							kernel_result w = _kernel(xi,yi,zi,xj,yj,zj,hi);
 
-							// rhs terms (i.e. Eq(41) from Fatehi's paper)
+							// RHS terms
 							fac11 += 2.* (m/rhoj) * ex * w.w_x * ((fi - fj)*rij1 - (ex*der_x + ey*der_y + ez*der_z));
 							fac12 += 2.* (m/rhoj) * ex * w.w_y * ((fi - fj)*rij1 - (ex*der_x + ey*der_y + ez*der_z));
 							fac13 += 2.* (m/rhoj) * ex * w.w_z * ((fi - fj)*rij1 - (ex*der_x + ey*der_y + ez*der_z));
@@ -831,7 +822,7 @@ void perform_nmfs(particle* particles) {
 			double B_hat[9];
 			memcpy(B_hat,Bhat + 9*i,sizeof(double)*9);
 
-			// Laplacian (i.e. Eq(41) from Fatehi paper) -> double contraction
+			// Laplacian -> double contraction
 			particles[i].LaplF = B_hat[0]*fac11 + B_hat[1]*fac12 + B_hat[2]*fac13 +
 								 B_hat[3]*fac21 + B_hat[4]*fac22 + B_hat[5]*fac23 +
 								 B_hat[6]*fac31 + B_hat[7]*fac32 + B_hat[8]*fac33;

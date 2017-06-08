@@ -56,7 +56,7 @@ void rkpm_compute_correction_terms(particle* particles) {
 	singleton_geometry* grid_geom  =  get_singleton_geometry();
 
 	for (unsigned int b = 0; b < grid_geom->num_cell; b++) {
-		//finding neighbors
+		// finding neighbors
 		int gi = 0;
 		int gj = 0;
 		int gk = 0;
@@ -106,7 +106,7 @@ void rkpm_compute_correction_terms(particle* particles) {
 			double m1i_zz[3] = {0.f,0.f,0.f};
 			double m2i_zz[9] = {0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f};
 
-			//loop over neighbors
+			// loop over neighbors
 			for (unsigned int ni = low_i; ni < high_i; ni++) {
 				for (unsigned int nj = low_j; nj < high_j; nj++) {
 					for (unsigned int nk = low_k; nk < high_k; nk++) {
@@ -139,7 +139,7 @@ void rkpm_compute_correction_terms(particle* particles) {
 
 							kernel_result w = _kernel(xi,yi,zi,xj,yj,zj,hi);
 
-							//moment
+							// moment
 							m0i      += w.w*m/rhoj;
 
 							m1i[0]   += rx*w.w*m/rhoj;
@@ -156,7 +156,7 @@ void rkpm_compute_correction_terms(particle* particles) {
 							m2i[7]   += rz*ry*w.w*m/rhoj;
 							m2i[8]   += rz*rz*w.w*m/rhoj;
 
-							//xder
+							// xder
 							m0i_x    += w.w_x*m/rhoj;
 
 							m1i_x[0] += w.w_x*rx*m/rhoj + w.w*r_xx*m/rhoj;
@@ -173,7 +173,7 @@ void rkpm_compute_correction_terms(particle* particles) {
 							m2i_x[7] += rz*ry*w.w_x*m/rhoj + w.w*(r_xz*ry + rz*r_xy)*m/rhoj;
 							m2i_x[8] += rz*rz*w.w_x*m/rhoj + w.w*(r_xz*rz + rz*r_xz)*m/rhoj;
 
-							//yder
+							// yder
 							m0i_y    += w.w_y*m/rhoj;
 
 							m1i_y[0] += w.w_y*rx*m/rhoj + w.w*r_yx*m/rhoj;
@@ -190,7 +190,7 @@ void rkpm_compute_correction_terms(particle* particles) {
 							m2i_y[7] += rz*ry*w.w_y*m/rhoj + w.w*(r_yz*ry + rz*r_yy)*m/rhoj;
 							m2i_y[8] += rz*rz*w.w_y*m/rhoj + w.w*(r_yz*rz + rz*r_yz)*m/rhoj;
 
-							//zder
+							// zder
 							m0i_z    += w.w_z*m/rhoj;
 
 							m1i_z[0] += w.w_z*rx*m/rhoj + w.w*r_zx*m/rhoj;
@@ -207,7 +207,7 @@ void rkpm_compute_correction_terms(particle* particles) {
 							m2i_z[7] += rz*ry*w.w_z*m/rhoj + w.w*(r_zz*ry + rz*r_zy)*m/rhoj;
 							m2i_z[8] += rz*rz*w.w_z*m/rhoj + w.w*(r_zz*rz + rz*r_zz)*m/rhoj;
 
-							//xxder
+							// xxder
 							m0i_xx    += w.w_xx*m/rhoj;
 
 							m1i_xx[0] += (2.f*r_xx*w.w_x + rx*w.w_xx)*m/rhoj;
@@ -224,7 +224,7 @@ void rkpm_compute_correction_terms(particle* particles) {
 							m2i_xx[7] += (rz*ry*w.w_xx + 4.*rz*r_xy*w.w_x + 2.*w.w*r_xz*r_xy)*m/rhoj;
 							m2i_xx[8] += (rz*rz*w.w_xx + 4.*rz*r_xz*w.w_x + 2.*w.w*r_xz*r_xz)*m/rhoj;
 
-							//yyder
+							// yyder
 							m0i_yy    += w.w_yy*m/rhoj;
 
 							m1i_yy[0] += (2.f*r_yx*w.w_y + rx*w.w_yy)*m/rhoj;
@@ -241,7 +241,7 @@ void rkpm_compute_correction_terms(particle* particles) {
 							m2i_yy[7] += (rz*ry*w.w_yy + 4.*rz*r_yy*w.w_y + 2.*w.w*r_yz*r_yy)*m/rhoj;
 							m2i_yy[8] += (rz*rz*w.w_yy + 4.*rz*r_yz*w.w_y + 2.*w.w*r_yz*r_yz)*m/rhoj;
 
-							//zzder
+							// zzder
 							m0i_zz    += w.w_zz*m/rhoj;
 
 							m1i_zz[0] += (2.f*r_zx*w.w_z + rx*w.w_zz)*m/rhoj;
@@ -295,7 +295,7 @@ void perform_rkpm(particle* particles) {
 
 	for (unsigned int b = 0; b < grid_geom->num_cell; b++) {
 
-		//finding neighbors
+		// finding neighbors
 		int gi = 0;
 		int gj = 0;
 		int gk = 0;
@@ -404,7 +404,7 @@ void perform_rkpm(particle* particles) {
 			solve4x4(M, rhs_b, C_yy);
 			solve4x4(M, rhs_c, C_zz);
 
-			//loop over neighbors
+			// loop over neighbors
 			for (unsigned int ni = low_i; ni < high_i; ni++) {
 				for (unsigned int nj = low_j; nj < high_j; nj++) {
 					for (unsigned int nk = low_k; nk < high_k; nk++) {

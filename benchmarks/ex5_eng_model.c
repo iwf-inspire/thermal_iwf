@@ -569,7 +569,6 @@ static void init_top(particle *particles, double hdy, double *dx1) {
 	for (unsigned int i = 0; i < n_top; i++) {
 		particles[ip_start + i].label = TOP;
 		particles[ip_start + i].bnd = false;
-		particles[ip_start + i].blank = false;
 		particles[ip_start + i].air_surf = false;
 		particles[ip_start + i].con_surf = false;
 		particles[ip_start + i].bar_surf = false;
@@ -667,7 +666,6 @@ static void init_connector_top(particle *particles, double hdy, double *dx2) {
 	for (unsigned int i = 0; i < n_connector_top; i++) {
 		particles[ip_start + i].label = CONNECTOR_TOP;
 		particles[ip_start + i].bnd = false;
-		particles[ip_start + i].blank = false;
 		particles[ip_start + i].air_surf = false;
 		particles[ip_start + i].con_surf = false;
 		particles[ip_start + i].bar_surf = false;
@@ -781,7 +779,6 @@ static void init_inlet(particle *particles, double hdy, double *dx3) {
 	for (unsigned int i = 0; i < n_inlet; i++) {
 		particles[ip_start + i].label = INLET;
 		particles[ip_start + i].bnd = false;
-		particles[ip_start + i].blank = false;
 		particles[ip_start + i].air_surf = false;
 		particles[ip_start + i].con_surf = false;
 		particles[ip_start + i].bar_surf = false;
@@ -905,7 +902,6 @@ static void init_connector_inlet(particle *particles, double hdy, double *dx4) {
 	for (unsigned int i = 0; i < n_connector_inlet; i++) {
 		particles[ip_start + i].label = CONNECTOR_INLET;
 		particles[ip_start + i].bnd = false;
-		particles[ip_start + i].blank = false;
 		particles[ip_start + i].air_surf = false;
 		particles[ip_start + i].con_surf = false;
 		particles[ip_start + i].bar_surf = false;
@@ -1005,7 +1001,6 @@ static void init_connector_bar_center(particle *particles, double hdy, double *d
 	for (unsigned int i = 0; i < n_connector_bar_center; i++) {
 		particles[ip_start + i].label = CONNECTOR_BAR_CENTER;
 		particles[ip_start + i].bnd = false;
-		particles[ip_start + i].blank = false;
 		particles[ip_start + i].air_surf = false;
 		particles[ip_start + i].con_surf = false;
 		particles[ip_start + i].bar_surf = false;
@@ -1117,7 +1112,6 @@ static void init_bar(particle *particles, double hdy, double *dx6) {
 	for (unsigned int i = 0; i < n_bar; i++) {
 		particles[ip_start + i].label = BAR;
 		particles[ip_start + i].bnd = false;
-		particles[ip_start + i].blank = false;
 		particles[ip_start + i].air_surf = false;
 		particles[ip_start + i].con_surf = false;
 		particles[ip_start + i].bar_surf = false;
@@ -1221,7 +1215,6 @@ static void init_cross_1(particle *particles, double hdy, double *dx7) {
 	for (unsigned int i = 0; i < n_cross_1; i++) {
 		particles[ip_start + i].label = CROSS_1;
 		particles[ip_start + i].bnd = false;
-		particles[ip_start + i].blank = false;
 		particles[ip_start + i].air_surf = false;
 		particles[ip_start + i].con_surf = false;
 		particles[ip_start + i].bar_surf = false;
@@ -1289,7 +1282,6 @@ static void init_cross_2(particle *particles, double hdy, double *dx8) {
 	for (unsigned int i = 0; i < n_cross_2; i++) {
 		particles[ip_start + i].label = CROSS_2;
 		particles[ip_start + i].bnd = false;
-		particles[ip_start + i].blank = false;
 		particles[ip_start + i].air_surf = false;
 		particles[ip_start + i].con_surf = false;
 		particles[ip_start + i].bar_surf = false;
@@ -1358,7 +1350,6 @@ static void init_connector_heat_sink(particle *particles, double hdy, double *dx
 	for (unsigned int i = 0; i < n_connector_heat_sink; i++) {
 		particles[ip_start + i].label = CONNECTOR_HEAT_SINK;
 		particles[ip_start + i].bnd = false;
-		particles[ip_start + i].blank = false;
 		particles[ip_start + i].air_surf = false;
 		particles[ip_start + i].con_surf = false;
 		particles[ip_start + i].bar_surf = false;
@@ -1427,7 +1418,6 @@ static void init_heat_sink(particle *particles, double hdy, double *dx10) {
 	for (unsigned int i = 0; i < n_heat_sink; i++) {
 		particles[ip_start + i].label = HEAT_SINK;
 		particles[ip_start + i].bnd = false;
-		particles[ip_start + i].blank = false;
 		particles[ip_start + i].air_surf = false;
 		particles[ip_start + i].con_surf = false;
 		particles[ip_start + i].bar_surf = false;
@@ -1524,7 +1514,6 @@ static void make_ghost_particles_top(particle* particles, unsigned int Ntot, uns
 		if (r_min>=0.5*dy && !(zghost[i]<(0.1082-0.5*dy))) {
 			particles[Ntot + ip].label = GHOST_TOP;
 			particles[Ntot + ip].bnd = true;
-			particles[Ntot + ip].blank = false;
 			particles[Ntot + ip].air_surf = false;
 
 			particles[Ntot + ip].px = xghost[i];
@@ -1650,7 +1639,6 @@ static void make_ghost_particles_core(particle* particles, unsigned int Ntot, un
 		if (r_min>=0.5*dy && !(zghost[i]>(0.1054+0.5*dy))) {
 			particles[Ntot + Nghost_top + ip].label = GHOST_CORE;
 			particles[Ntot + Nghost_top + ip].bnd = true;
-			particles[Ntot + Nghost_top + ip].blank = false;
 			particles[Ntot + Nghost_top + ip].air_surf = false;
 
 			particles[Ntot + Nghost_top + ip].px = xghost[i];
@@ -1753,7 +1741,6 @@ static void make_ghost_particles_bar(particle* particles, unsigned int Ntot, uns
 		if (r_min>=0.5*dy) {
 			particles[Ntot + Nghost_top + Nghost_core + ip].label = GHOST_BAR;
 			particles[Ntot + Nghost_top + Nghost_core + ip].bnd = true;
-			particles[Ntot + Nghost_top + Nghost_core + ip].blank = false;
 			particles[Ntot + Nghost_top + Nghost_core + ip].air_surf = false;
 
 			particles[Ntot + Nghost_top + Nghost_core + ip].px = xghost[i];

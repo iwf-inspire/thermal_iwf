@@ -218,7 +218,6 @@ particle* steady_init3D(unsigned int N, unsigned int Nbnd, double hdx, bool RAND
 
 				particles[ID].label = NORMAL;
 				particles[ID].bnd   = false;
-				particles[ID].blank = false;
 
 				if (is_edge1(i,j,k,NN) || is_edge2(i,j,k,NN)) particles[ID].bnd = true;
 			}

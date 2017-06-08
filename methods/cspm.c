@@ -190,23 +190,12 @@ void perform_cspm(particle* particles) {
 
 						for (unsigned int j = grid_geom->cell_start[ID]; j < grid_geom->cell_end[ID]; j++) {
 
-							//if (particles[i].label==INLET && particles[j].label!=INLET) continue;
-							//if (particles[i].label==INLET && particles[j].label==CONNECTOR_TOP) continue;
-							//if (particles[i].label==CONNECTOR_TOP && particles[j].label==INLET) continue;
-							//if (particles[i].label==CONNECTOR_INLET && particles[j].label==INLET) continue;
-							//if (particles[i].label==CONNECTOR_TOP && particles[j].label==CONNECTOR_INLET) continue;
-							//if (particles[i].label==CONNECTOR_INLET && particles[j].label==CONNECTOR_TOP) continue;
-							//if (particles[i].label==BAR && particles[j].label==CONNECTOR_BAR_CENTER) continue;
-							//if (particles[i].label==CONNECTOR_BAR_CENTER && particles[j].label==BAR) continue;
-
 							double xj   = particles[j].px;
 							double yj   = particles[j].py;
 							double zj   = particles[j].pz;
 							double rhoj = particles[j].rho;
 							double m    = particles[j].m;
 							double fj   = particles[j].f;
-
-							//if(particles[j].bnd) fj = fi;
 
 							kernel_result w = _kernel(xi,yi,zi,xj,yj,zj,hi);
 
@@ -232,7 +221,7 @@ void perform_cspm(particle* particles) {
 			particles[i].f_y = ders1[1];
 			particles[i].f_z = ders1[2];
 
-			// rhs2 terms for 2nd derivatives
+			// RHS2 terms for 2nd derivatives
 			double Fxx = 0.f; double Bxxx = 0.f; double Bxxy = 0.f; double Bxxz=0.f;
 			double Fxy = 0.f; double Bxyx = 0.f; double Bxyy = 0.f; double Bxyz=0.f;
 			double Fxz = 0.f; double Bxzx = 0.f; double Bxzy = 0.f; double Bxzz=0.f;
@@ -240,7 +229,7 @@ void perform_cspm(particle* particles) {
 			double Fyz = 0.f; double Byzx = 0.f; double Byzy = 0.f; double Byzz=0.f;
 			double Fzz = 0.f; double Bzzx = 0.f; double Bzzy = 0.f; double Bzzz=0.f;
 
-			//loop over neighbors
+			// loop over neighbors
 			for (unsigned int ni = low_i; ni < high_i; ni++) {
 				for (unsigned int nj = low_j; nj < high_j; nj++) {
 					for (unsigned int nk = low_k; nk < high_k; nk++) {
@@ -249,23 +238,12 @@ void perform_cspm(particle* particles) {
 
 						for (unsigned int j = grid_geom->cell_start[ID]; j < grid_geom->cell_end[ID]; j++) {
 
-							//if (particles[i].label==INLET && particles[j].label!=INLET) continue;
-							//if (particles[i].label==INLET && particles[j].label==CONNECTOR_TOP) continue;
-							//if (particles[i].label==CONNECTOR_TOP && particles[j].label==INLET) continue;
-							//if (particles[i].label==CONNECTOR_INLET && particles[j].label==INLET) continue;
-							//if (particles[i].label==CONNECTOR_TOP && particles[j].label==CONNECTOR_INLET) continue;
-							//if (particles[i].label==CONNECTOR_INLET && particles[j].label==CONNECTOR_TOP) continue;
-							//if (particles[i].label==BAR && particles[j].label==CONNECTOR_BAR_CENTER) continue;
-							//if (particles[i].label==CONNECTOR_BAR_CENTER && particles[j].label==BAR) continue;
-
 							double xj   = particles[j].px;
 							double yj 	= particles[j].py;
 							double zj   = particles[j].pz;
 							double rhoj = particles[j].rho;
 							double m    = particles[j].m;
 							double fj   = particles[j].f;
-
-							//if(particles[j].bnd) fj = fi;
 
 							kernel_result w = _kernel(xi,yi,zi,xj,yj,zj,hi);
 

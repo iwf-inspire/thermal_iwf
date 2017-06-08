@@ -7,7 +7,7 @@ void perform_sph(particle* particles) {
 
 	for (unsigned int b = 0; b < grid_geom->num_cell; b++) {
 
-		//finding neighbors
+		// finding neighbors
 		int gi = 0;
 		int gj = 0;
 		int gk = 0;
@@ -34,7 +34,7 @@ void perform_sph(particle* particles) {
 			double f_x  = 0.; double f_y  = 0.; double f_z  = 0.;
 			double f_xx = 0.; double f_yy = 0.; double f_zz = 0.;
 
-			//loop over neighbors
+			// loop over neighbors
 			for (unsigned int ni = low_i; ni < high_i; ni++) {
 				for (unsigned int nj = low_j; nj < high_j; nj++) {
 					for (unsigned int nk = low_k; nk < high_k; nk++) {
@@ -42,8 +42,6 @@ void perform_sph(particle* particles) {
 						unsigned int ID = ni*grid_geom->ny*grid_geom->nz + nj*grid_geom->nz + nk;
 
 						for (unsigned int j = grid_geom->cell_start[ID]; j < grid_geom->cell_end[ID]; j++) {
-
-							if (particles[j].blank) continue;
 
 							particle part 	= particles[j];
 							double xj 		= part.px;
@@ -77,7 +75,7 @@ void perform_sph_brookshaw(particle* particles) {
 	singleton_geometry *grid_geom  = get_singleton_geometry();
 
 	for (unsigned int b = 0; b < grid_geom->num_cell; b++) {
-		//finding neighbors
+		// finding neighbors
 		int gi = 0;
 		int gj = 0;
 		int gk = 0;
@@ -107,7 +105,7 @@ void perform_sph_brookshaw(particle* particles) {
 
 			double laplacian  = 0.;
 
-			//loop over neighbors
+			// loop over neighbors
 			for (unsigned int ni = low_i; ni < high_i; ni++) {
 				for (unsigned int nj = low_j; nj < high_j; nj++) {
 					for (unsigned int nk = low_k; nk < high_k; nk++) {
@@ -115,8 +113,6 @@ void perform_sph_brookshaw(particle* particles) {
 						unsigned int ID = ni*grid_geom->ny*grid_geom->nz + nj*grid_geom->nz + nk;
 
 						for (unsigned int j = grid_geom->cell_start[ID]; j < grid_geom->cell_end[ID]; j++) {
-
-							if (particles[j].blank) continue;
 
 							particle part 	= particles[j];
 							double xj 		= part.px;
