@@ -1,7 +1,6 @@
 #include "eng_heat_model.h"
 
 #define MAX_STEPS 50000
-static bool rk4 = false;
 
 static void plot_eng(particle* particles, unsigned int Ntot, unsigned int step) {
 	char fname[256];
@@ -17,6 +16,17 @@ static void plot_eng(particle* particles, unsigned int Ntot, unsigned int step) 
 
 void run_eng_model_3D(METHOD method) {
 	singleton_geometry *geometry = get_singleton_geometry();
+	singleton_physics  *physics  = get_singleton_physics();
+
+	double RHO_STL = physics->RHO_STL;
+	double RHO_ALU = physics->RHO_ALU;
+	double RHO_PUR = physics->RHO_PUR;
+	double KA_STL  = physics->KA_STL;
+	double KA_ALU  = physics->KA_ALU;
+	double KA_PUR  = physics->KA_PUR;
+	double CP_STL  = physics->CP_STL;
+	double CP_ALU  = physics->CP_ALU;
+	double CP_PUR  = physics->CP_PUR;
 
 	// parameters *****************************
 	double dx;
@@ -41,7 +51,6 @@ void run_eng_model_3D(METHOD method) {
 	correction_terms_meshfree_method(particles,method);
 
 	double dt = 0.25*dx*dx/alpha_max;
-	double t_init = 0.;
 	unsigned int step = 0;
 	double totalT_old = 0;
 	double totalT = 0;
@@ -58,8 +67,7 @@ void run_eng_model_3D(METHOD method) {
 
 		step++;
 
-		if(rk4) totalT = perform_eng_heat_rk4_3D  (particles,method,dt,step);
-		else    totalT = perform_eng_heat_euler_3D(particles,method,dt,step);
+		totalT = perform_eng_heat_euler_3D(particles,method,dt,step);
 
 		change = totalT - totalT_old;
 	}

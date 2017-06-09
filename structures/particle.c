@@ -1,5 +1,6 @@
+#include "particle.h"
 
-particle make_particle(unsigned int part_id, double px, double py, doube pz) {
+particle make_particle(unsigned int part_id, double px, double py, double pz) {
 	particle p;
 	memset(&p,0,sizeof(particle));
 

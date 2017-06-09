@@ -134,6 +134,12 @@ particle* transient_init3D(unsigned int N, double hdx, bool RANDOM) {
 			for (unsigned int k = 0; k < N; k++) {
 				unsigned int ID = i*N*N + j*N + k;
 
+				double px = i*dx;
+				double py = j*dx;
+				double pz = k*dx;
+
+				particles[ID] = make_particle(ID, px, py, pz);
+
 				particles[ID].idx = i;
 				particles[ID].idy = j;
 				particles[ID].idz = k;

@@ -184,6 +184,12 @@ particle* steady_init3D(unsigned int N, unsigned int Nbnd, double hdx, bool RAND
 			for (unsigned int k = 0; k < NN; k++) {
 				unsigned int ID = i*NN*NN + j*NN + k;
 
+				double px = i*dx;
+				double py = j*dx;
+				double pz = k*dx;
+
+				particles[ID] = make_particle(ID, px, py, pz);
+
 				particles[ID].idx = i;
 				particles[ID].idy = j;
 				particles[ID].idz = k;
