@@ -1,10 +1,9 @@
-#include "particle.h"
 
-particle make_particle(unsigned int idx, double px, double py, double pz, unsigned int N) {
+particle make_particle(unsigned int part_id, double px, double py, doube pz) {
 	particle p;
-	memset(&p, 0, sizeof(double)*N*N*N);
+	memset(&p,0,sizeof(particle));
 
-	p.idx = idx;
+	p.part_id = part_id;
 	p.px = px;
 	p.py = py;
 	p.pz = pz;

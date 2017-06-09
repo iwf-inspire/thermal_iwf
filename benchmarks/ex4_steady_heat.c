@@ -1,7 +1,5 @@
 #include "ex4_steady_heat.h"
 
-#define M_PI 3.14159265358979323846
-
 static bool steady_print = true;
 
 // RK4 temporary storage arrays

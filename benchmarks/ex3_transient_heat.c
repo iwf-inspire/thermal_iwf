@@ -1,7 +1,5 @@
 #include "ex3_transient_heat.h"
 
-#define M_PI 3.14159265358979323846
-
 bool trans_print = true;
 
 // RK4 interim storage arrays

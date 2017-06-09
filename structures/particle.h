@@ -76,6 +76,6 @@ typedef struct particle {
 
 } particle;
 
-particle make_particle(unsigned int idx, double px, double py, double pz, unsigned int N);
+particle make_particle(unsigned int part_id, double px, double py, doube pz);
 
 #endif /* PARTICLE_H_ */

@@ -12,13 +12,15 @@ particle* setup_reconstruction_polynomial_3D(unsigned int N, double hdx, bool RA
 			for (unsigned int k = 0; k < N; k++) {
 				unsigned int ID = i*N*N + j*N + k;
 
-				particles[ID].idx = i;
-				particles[ID].idy = j;
-				particles[ID].idz = k;
-
 				double px = i*dx;
 				double py = j*dx;
 				double pz = k*dx;
+
+				particles[ID] = make_particle(ID, px, py, pz);
+
+				particles[ID].idx = i;
+				particles[ID].idy = j;
+				particles[ID].idz = k;
 
 				bool EDGE = i==0 || j==0 || k==0 || i==N-1 || j==N-1 || k==N-1;
 

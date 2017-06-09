@@ -204,17 +204,3 @@ void solve6x6(double M[6*6], double P[6], double C[6]) {
 	C[5] = det6x6(minorM6)/detM;
 
 }
-
-int solve_quadratic(double coeff[3], double sol[2]) {
-	double a = coeff[0];
-	double b = coeff[1];
-	double c = coeff[2];
-	double delta = b*b - 4*a*c;
-
-	if (delta < 0.) return 0;
-
-	sol[0] = (-b + sqrt(delta))/(2.0*a);
-	sol[1] = (-b - sqrt(delta))/(2.0*a);
-
-	return 2;
-}

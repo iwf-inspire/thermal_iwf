@@ -1,6 +1,5 @@
 #include "../benchmarks/ex5_eng_model.h"
 
-#define M_PI 3.14159265358979323846
 #define DIM 3
 
 static bool eng_print = true;
