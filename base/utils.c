@@ -16,14 +16,14 @@ void inv3x3(double A[9], double Ainv[9]) {
 	Ainv[8] = (A[0]*A[4] - A[1]*A[3])/detA;
 }
 
-double det4x4(double M[4*4]) {
+static double det4x4(double M[4*4]) {
 	return M[0]*(M[5]*M[10]*M[15] + M[7]*M[9]*M[14] + M[13]*M[6]*M[11] - M[7]*M[10]*M[13] - M[5]*M[11]*M[14] - M[15]*M[6]*M[9])
 		 - M[1]*(M[4]*M[10]*M[15] + M[7]*M[8]*M[14] + M[12]*M[6]*M[11] - M[7]*M[10]*M[12] - M[4]*M[11]*M[14] - M[15]*M[6]*M[8])
 		 + M[2]*(M[4]*M[9] *M[15] + M[7]*M[8]*M[13] + M[12]*M[5]*M[11] - M[7]*M[9] *M[12] - M[4]*M[11]*M[13] - M[15]*M[5]*M[8])
 		 - M[3]*(M[4]*M[9] *M[14] + M[6]*M[8]*M[13] + M[12]*M[5]*M[10] - M[6]*M[9] *M[12] - M[4]*M[10]*M[13] - M[14]*M[5]*M[8]);
 }
 
-double det5x5(double M[5*5]) {
+static double det5x5(double M[5*5]) {
 	double minor11[4*4] = {M[6 ],M[7 ],M[8 ],M[9 ],
 						   M[11],M[12],M[13],M[14],
 						   M[16],M[17],M[18],M[19],
@@ -52,7 +52,7 @@ double det5x5(double M[5*5]) {
 		  +M[4]*(det4x4(minor15));
 }
 
-double det6x6(double M[6*6]) {
+static double det6x6(double M[6*6]) {
 	double minor11[5*5] = {M[7 ],M[8 ],M[9 ],M[10],M[11],
 						   M[13],M[14],M[15],M[16],M[17],
 					       M[19],M[20],M[21],M[22],M[23],
@@ -90,32 +90,6 @@ double det6x6(double M[6*6]) {
 		  -M[3]*(det5x5(minor14))
 		  +M[4]*(det5x5(minor15))
 	      -M[5]*(det5x5(minor16));
-}
-
-double det50x50_limp(double M[50][50]) {
-	double det = 1.0;
-	double ratio;
-
-	/* Conversion of matrix "M" to upper triangular */
-	for(unsigned int i = 0; i < 50; i++) {
-		for(unsigned int j = 0; j < 50; j++) {
-
-			if(j > i) {
-
-				ratio = M[j][i]/M[i][i];
-
-				for(unsigned int k = 0; k < 50; k++) {
-					M[j][k] -= ratio * M[i][k];
-				}
-			}
-		}
-	}
-
-	for(unsigned int i = 0; i < 50; i++) {
-		det *= M[i][i];
-	}
-
-	return det;
 }
 
 void solve3x3(double M[3*3], double P[3], double C[3]) {
@@ -231,75 +205,6 @@ void solve6x6(double M[6*6], double P[6], double C[6]) {
 
 }
 
-void solve4x4_gsl(double A[4*4], double B[4], double res[4]) {
-	gsl_matrix_view a = gsl_matrix_view_array(A,4,4);
-	gsl_vector_view b = gsl_vector_view_array(B,4);
-
-	static gsl_vector *x = NULL;
-
-	if (x == NULL)
-		x = gsl_vector_alloc(4);
-
-	int s;
-	gsl_permutation *p = gsl_permutation_alloc(4);
-
-	gsl_linalg_LU_decomp(&a.matrix, p, &s);
-	gsl_linalg_LU_solve(&a.matrix, p, &b.vector, x);
-
-	for (unsigned int i = 0; i < 4; i++) {
-		res[i] = gsl_vector_get(x,i);
-		if (res[i] != res[i]) printf("non-real root! \n");
-	}
-
-	gsl_permutation_free(p);
-}
-
-void solve6x6_gsl(double A[6*6], double B[6], double res[6]) {
-	gsl_matrix_view a = gsl_matrix_view_array(A,6,6);
-	gsl_vector_view b = gsl_vector_view_array(B,6);
-
-	static gsl_vector *x = NULL;
-
-	if (x == NULL)
-		x = gsl_vector_alloc(6);
-
-	int s;
-	gsl_permutation *p = gsl_permutation_alloc(6);
-
-	gsl_linalg_LU_decomp(&a.matrix, p, &s);
-	gsl_linalg_LU_solve(&a.matrix, p, &b.vector, x);
-
-	for (unsigned int i = 0; i < 6; i++) {
-		res[i] = gsl_vector_get(x,i);
-		if (res[i] != res[i]) printf("non-real root! \n");
-	}
-
-	gsl_permutation_free(p);
-}
-
-void solve9x9_gsl(double A[9*9], double B[9], double res[9]) {
-	gsl_matrix_view a = gsl_matrix_view_array(A,9,9);
-	gsl_vector_view b = gsl_vector_view_array(B,9);
-
-	static gsl_vector *x = NULL;
-
-	if (x == NULL)
-		x = gsl_vector_alloc(9);
-
-	int s;
-	gsl_permutation *p = gsl_permutation_alloc(9);
-
-	gsl_linalg_LU_decomp(&a.matrix, p, &s);
-	gsl_linalg_LU_solve(&a.matrix, p, &b.vector, x);
-
-	for (unsigned int i = 0; i < 9; i++) {
-		res[i] = gsl_vector_get(x,i);
-		if (res[i] != res[i]) printf("non-real root! \n");
-	}
-
-	gsl_permutation_free(p);
-}
-
 int solve_quadratic(double coeff[3], double sol[2]) {
 	double a = coeff[0];
 	double b = coeff[1];
@@ -312,11 +217,4 @@ int solve_quadratic(double coeff[3], double sol[2]) {
 	sol[1] = (-b - sqrt(delta))/(2.0*a);
 
 	return 2;
-}
-
-int mod (int a, int b) {
-	int rem = a % b;
-	if(rem < 0)
-		rem += b;
-	return rem;
 }
