@@ -1,6 +1,6 @@
 # thermal_iwf
 
-This is the public repository for __thermal_iwf__. __thermal_iwf__ is the software accompanying the paper "Contemporary Meshfree Methods for Three Dimensional Heat Conduction Problems" to be published in the journal Mathematics and Computers in Simulation. __thermal_iwf__ contains a wide array of meshless algorithms for approxmation of the laplacian in general and the solution of heat conduction problems in particlar. Namely:
+This is the public repository for __thermal_iwf__. __thermal_iwf__ is the software accompanying the paper "Contemporary Meshfree Methods for Three Dimensional Heat Conduction Problems" published by Springer Nature in Archives of Computational Methods in Engineering. __thermal_iwf__ contains a wide array of meshless algorithms for approxmation of the laplacian in general and the solution of heat conduction problems in particlar. Namely:
 
 * SPH
 * SPH w/ Brookshaw Approximation
