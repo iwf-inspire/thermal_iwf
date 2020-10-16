@@ -75,7 +75,7 @@ void perform_sph(particle* particles) {
 							f_z  += (fj - fi)*w.w_z* m/rhoj;
 							f_xx += (fj - fi)*w.w_xx*m/rhoj;
 							f_yy += (fj - fi)*w.w_yy*m/rhoj;
-							f_yy += (fj - fi)*w.w_zz*m/rhoj;
+							f_zz += (fj - fi)*w.w_zz*m/rhoj;
 						}
 					}
 				}
